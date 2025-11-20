@@ -30,9 +30,6 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- App CSS -->
-    <link rel="stylesheet" href="/src/style.css">
-
     <!-- PDF.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
@@ -40,7 +37,6 @@
             "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
     </script>
 </head>
-
 
 <body class="app">
 
@@ -104,15 +100,15 @@
     <!-- Zone invisible utilisée pour interactions tactiles -->
     <div id="tap-zone" class="absolute inset-0 z-30 hidden"></div>
 
-    <!-- App JS -->
-    <script src="/src/main.js"></script>
+    <!-- App JS (Vite) -->
+    <script type="module" src="/src/main.js"></script>
 
     <!-- Lucide init -->
     <script>
         lucide.createIcons();
     </script>
 
-        <!-- Enregistrement du Service Worker -->
+    <!-- Service Worker -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
