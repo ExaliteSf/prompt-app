@@ -1,6 +1,6 @@
 /* ------------------------------
    RESET + BASE
------------------------------- */
+------------------------------ 
 
 * {
   margin: 0;
@@ -13,11 +13,12 @@ html, body {
   height: 100%;
   overflow: hidden;
 
-  /* Police globale */
+  /* Police globale 
   font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif !important;
   -webkit-font-smoothing: antialiased;
   font-weight: 400;
 
-  /* Fond sombre Liquid Glass */
+  /* Fond sombre Liquid Glass 
   background: radial-gradient(circle at top left, #2f3136, #1d1f22 60%, #0f1113 100%);
 }
+*/

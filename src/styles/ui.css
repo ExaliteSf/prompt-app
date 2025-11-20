@@ -1,6 +1,6 @@
 /* ------------------------------
    CONTROLES FLOTANTS
------------------------------- */
+------------------------------ 
 .floating-controls {
   position: fixed;
   bottom: 22px;
@@ -18,7 +18,7 @@
 
 /* ------------------------------
    BOUTONS LIQUID GLASS — APPLE (VERT)
------------------------------- */
+------------------------------ 
 .glass-btn {
   position: relative;
   padding: 14px 32px;
@@ -33,7 +33,7 @@
 
   color: #ffffff;
 
-  /* Lisibilité sur fond clair */
+  /* Lisibilité sur fond clair 
   text-shadow:
     0px 2px 4px rgba(0, 0, 0, 0.55),
     0px 0px 6px rgba(0, 0, 0, 0.35);
@@ -96,7 +96,7 @@
 
 /* ------------------------------
    BOUTON DANGER (ROUGE)
------------------------------- */
+------------------------------ 
 .glass-btn.danger {
   border: 1px solid rgba(255, 125, 125, 0.5);
   background: linear-gradient(
@@ -124,7 +124,7 @@
 
 /* ------------------------------
    SLIDER LIQUID GLASS
------------------------------- */
+------------------------------ 
 .speed-wrapper input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
@@ -199,7 +199,7 @@
 
 /* =======================================
       RESPONSIVE — TABLETTES (< 900px)
-   ======================================= */
+   ======================================= 
 @media (max-width: 900px) {
   .floating-controls {
     gap: 16px;
@@ -221,7 +221,7 @@
 
 /* =======================================
       RESPONSIVE — SMARTPHONES (< 600px)
-   ======================================= */
+   ======================================= 
 @media (max-width: 600px) {
 
   .floating-controls {
@@ -263,7 +263,7 @@
 
 /* =======================================
    TRES PETITS ÉCRANS (< 400px)
-   ======================================= */
+   ======================================= 
 @media (max-width: 400px) {
   .floating-controls {
     gap: 10px;
@@ -285,3 +285,4 @@
     height: 22px;
   }
 }
+*/

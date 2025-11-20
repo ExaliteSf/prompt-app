@@ -1,3 +1,266 @@
-@import "./styles/base.css";
-@import "./styles/layout.css";
-@import "./styles/ui.css";
+/* ========================================
+   BASE — Dark Neutral Pro
+======================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+:root {
+    --bg: #0F1115;
+    --surface: #181B20;
+    --border: #24272E;
+    --text: #E6E6E6;
+    --text-soft: #9CA3AF;
+    --accent: #4C8BF5;
+    --accent-soft: rgba(76, 139, 245, 0.25);
+}
+
+html,
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", sans-serif;
+    height: 100%;
+    overflow: hidden;
+}
+
+
+/* Hide scrollbars */
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.hide-scrollbar {
+    scrollbar-width: none;
+}
+
+
+/* ========================================
+   MAIN SCROLL ZONE
+======================================== */
+
+.scroll-zone {
+    height: 100vh;
+    overflow-y: scroll;
+    position: relative;
+    padding: 10vh 0 40vh 0;
+}
+
+
+/* ========================================
+   EMPTY STATE
+======================================== */
+
+.empty-state {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.empty-card {
+    background: var(--surface);
+    padding: 32px;
+    border-radius: 16px;
+    text-align: center;
+    border: 1px solid var(--border);
+}
+
+.empty-card h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.subtitle {
+    color: var(--text-soft);
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+.icon-main {
+    width: 48px;
+    height: 48px;
+    color: var(--accent);
+    margin: 0 auto 12px;
+}
+
+
+/* Upload button */
+
+.upload-btn {
+    background: var(--accent);
+    color: white;
+    padding: 12px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.upload-btn:hover {
+    background: #3a76e0;
+}
+
+
+/* ========================================
+   PDF RENDER AREA
+======================================== */
+
+.pdf-area canvas {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+
+/* ========================================
+   HUD BOTTOM BAR
+======================================== */
+
+.hud {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 18px 16px 28px;
+    background: rgba(15, 17, 21, 0.92);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+}
+
+.hud-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+
+/* Play / Pause button */
+
+.play-btn {
+    width: 54px;
+    height: 54px;
+    background: white;
+    color: black;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.play-btn:hover {
+    transform: scale(1.07);
+}
+
+
+/* Slider */
+
+.slider-box {
+    flex: 1;
+    background: var(--surface);
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.slider-box i {
+    color: var(--text-soft);
+}
+
+input[type=range] {
+    width: 100%;
+}
+
+
+/* Settings button */
+
+.hud-btn {
+    padding: 12px;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-soft);
+    transition: 0.2s;
+}
+
+.hud-btn:hover {
+    background: #1f2229;
+    color: var(--text);
+}
+
+
+/* Options avancées */
+
+.advanced {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.adv-btn {
+    background: var(--surface);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 0.75rem;
+    border: 1px solid var(--border);
+    color: var(--text-soft);
+    transition: 0.2s;
+}
+
+.adv-btn:hover {
+    background: #1f2229;
+    color: var(--text);
+}
+
+
+/* Animations discrètes */
+
+.hidden {
+    display: none;
+}
+
+.settings-title {
+    padding: 8px 0;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.settings-grid {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.settings-page {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.settings-page span {
+    font-size: 0.85rem;
+    color: var(--text);
+    opacity: 0.8;
+}
+
+.settings-page input[type=range] {
+    width: 100%;
+}

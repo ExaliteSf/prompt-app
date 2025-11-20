@@ -1,181 +1,211 @@
-/* ---------------------------------------------------
-   IMPORTS PDF.js + worker
------------------------------------------------------*/
-import * as pdfjsLib from "pdfjs-dist";
-import pdfWorker from "pdfjs-dist/build/pdf.worker.mjs?url";
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
+lucide.createIcons();
 
-/* ---------------------------------------------------
-   VARIABLES DOM
------------------------------------------------------*/
-const fileInput = document.getElementById("fileInput");
-const emptyMessage = document.getElementById("emptyMessage");
-const pdfContent = document.getElementById("pdfContent");
+// GLOBALS
+let isPlaying = false;
+let scrollSpeed = 1.5;
+let animationId = null;
+let currentScale = 1.0;
 
-// Contrôles flottants
-const startBtn = document.getElementById("startBtn");
-const stopBtn = document.getElementById("stopBtn");
-const speedRange = document.getElementById("speedRange");
-
-// Modale réglages par page
-const pageSettingsBtn = document.getElementById("pageSettingsBtn");
-const pageSettingsModal = document.getElementById("pageSettingsModal");
-const pageSettingsList = document.getElementById("pageSettingsList");
-const closePageSettings = document.getElementById("closePageSettings");
-
-/* ---------------------------------------------------
-   SCROLL AUTOMATIQUE
------------------------------------------------------*/
-let scrollInterval = null;
-
-// Vitesse globale
-let scrollSpeed = 2;
-
-// Vitesse personnalisée par page
-let pageSpeeds = {};  // { 1: 5, 2: 3, ... }
-
-/* slider global */
-speedRange.addEventListener("input", () => {
-    scrollSpeed = Number(speedRange.value);
-});
-
-/* START */
-startBtn.addEventListener("click", () => {
-    clearInterval(scrollInterval);
-
-    scrollInterval = setInterval(() => {
-        const currentPage = getCurrentPage();
-        const speed = pageSpeeds[currentPage] ?? scrollSpeed;
-        pdfContent.scrollTop += speed;
-    }, 40);
-});
-
-/* STOP */
-stopBtn.addEventListener("click", () => {
-    clearInterval(scrollInterval);
-});
-
-/* ---------------------------------------------------
-   DETECTER LA PAGE ACTUELLE
------------------------------------------------------*/
-function getCurrentPage() {
-    const canvases = [...pdfContent.querySelectorAll("canvas")];
-
-    for (let i = 0; i < canvases.length; i++) {
-        const rect = canvases[i].getBoundingClientRect();
-
-        // Page considérée active si visible au moins à 25%
-        if (rect.top <= window.innerHeight * 0.25 && rect.bottom > 0) {
-            return i + 1;
-        }
-    }
-
-    return canvases.length;
-}
-
-/* ---------------------------------------------------
-   SELECTION MULTI-PDF
------------------------------------------------------*/
 let totalPages = 0;
 
-fileInput.addEventListener("change", async () => {
-    const files = [...fileInput.files];
-    if (files.length === 0) return;
+// ⚠️ vitesses par page
+let pageSpeeds = {};
 
-    pdfContent.innerHTML = "";
-    pdfContent.style.display = "block";
-    emptyMessage.style.display = "none";
 
-    pageSpeeds = {};
+// DOM
+const scroller = document.getElementById('scroller');
+const pdfRenderArea = document.getElementById('pdfArea');
+const fileInput = document.getElementById('fileInput');
+const emptyState = document.getElementById('empty');
+const hudControls = document.getElementById('hud');
+const advancedSettings = document.getElementById('advanced');
+
+const btnToggle = document.getElementById('toggleBtn');
+const speedRange = document.getElementById('speed');
+const btnSettings = document.getElementById('settingsBtn');
+
+
+// ---------------------------------------------------
+// UPLOAD MULTI-PDF
+// ---------------------------------------------------
+fileInput.addEventListener('change', async (e) => {
+    if (e.target.files.length === 0) return;
+
+    const files = [...e.target.files];
+
+    emptyState.style.display = 'none';
+    pdfRenderArea.innerHTML = "";
     totalPages = 0;
+    pageSpeeds = {}; // reset des vitesses
 
     for (const file of files) {
-        await renderPDF(file);
+        const url = URL.createObjectURL(file);
+        await renderPDF(url);
     }
 
-    generatePageSettingsUI();
+    updateSettingsPanel();
 });
 
-/* ---------------------------------------------------
-   RENDU D’UN PDF
------------------------------------------------------*/
-async function renderPDF(file) {
-    const buffer = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
 
-    console.log(`📄 Chargement : ${file.name} - ${pdf.numPages} pages`);
+// ---------------------------------------------------
+// PLAY / PAUSE
+// ---------------------------------------------------
+btnToggle.addEventListener('click', togglePlay);
 
-    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
 
-        totalPages++;
+// ---------------------------------------------------
+// SPEED CONTROL
+// ---------------------------------------------------
+speedRange.addEventListener('input', (e) => {
+    scrollSpeed = parseFloat(e.target.value);
+});
 
-        const page = await pdf.getPage(pageNum);
-        const viewport = page.getViewport({ scale: 1.4 });
 
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
+// ---------------------------------------------------
+// SETTINGS PANEL
+// ---------------------------------------------------
+btnSettings.addEventListener('click', () => {
+    advancedSettings.classList.toggle('hidden');
+});
 
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
 
-        await page.render({
-            canvasContext: ctx,
-            viewport
-        }).promise;
+// ---------------------------------------------------
+// KEYBOARD SHORTCUTS
+// ---------------------------------------------------
+document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+        e.preventDefault();
+        togglePlay();
+    }
+});
 
-        pdfContent.appendChild(canvas);
+
+// ---------------------------------------------------
+// RENDER PDF
+// ---------------------------------------------------
+async function renderPDF(url) {
+    try {
+        const pdf = await pdfjsLib.getDocument(url).promise;
+
+        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+
+            totalPages++;
+
+            const page = await pdf.getPage(pageNum);
+            const viewport = page.getViewport({ scale: 2.0 });
+
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            canvas.style.width = "100%";
+
+            await page.render({
+                canvasContext: ctx,
+                viewport
+            }).promise;
+
+            pdfRenderArea.appendChild(canvas);
+        }
+
+    } catch (err) {
+        console.error(err);
+        alert("Erreur lors du chargement du PDF : " + err.message);
     }
 }
 
-/* ---------------------------------------------------
-   GENERER L'UI DES VITESSES PAR PAGE
------------------------------------------------------*/
-function generatePageSettingsUI() {
-    pageSettingsList.innerHTML = "";
 
-    for (let i = 1; i <= totalPages; i++) {
-        const wrapper = document.createElement("div");
-        wrapper.className = "page-setting-row";
+// ---------------------------------------------------
+// SETTINGS CONTENT (PER-PAGE SPEED CONTROL)
+// ---------------------------------------------------
+function updateSettingsPanel() {
+    advancedSettings.innerHTML = `
+        <div class="settings-title">
+            <strong>Nombre total de pages :</strong> ${totalPages}
+        </div>
 
-        wrapper.innerHTML = `
-            <label>Page ${i}</label>
-            <input 
-                type="number" 
-                min="0" 
-                max="20" 
-                step="0.5" 
-                value="${pageSpeeds[i] ?? scrollSpeed}"
-                data-page="${i}"
-            >
-        `;
+        <div class="settings-grid">
+            ${Array.from({ length: totalPages }, (_, i) => {
 
-        pageSettingsList.appendChild(wrapper);
-    }
+                const speedValue = pageSpeeds[i + 1] ?? scrollSpeed;
 
-    // MAJ des valeurs par page
-    pageSettingsList.querySelectorAll("input").forEach(input => {
-        input.addEventListener("input", () => {
-            const page = Number(input.dataset.page);
-            const value = Number(input.value);
+                return `
+                    <div class="settings-page">
+                        <span>Page ${i + 1}</span>
+
+                        <input 
+                            type="range" 
+                            min="0" 
+                            max="10" 
+                            step="0.5" 
+                            value="${speedValue}"
+                            data-page="${i + 1}"
+                            class="page-speed-slider"
+                        >
+                    </div>
+                `;
+            }).join("")}
+        </div>
+    `;
+
+    document.querySelectorAll(".page-speed-slider").forEach(slider => {
+        slider.addEventListener("input", (e) => {
+            const page = Number(e.target.dataset.page);
+            const value = Number(e.target.value);
             pageSpeeds[page] = value;
         });
     });
 }
 
-/* ---------------------------------------------------
-   MODALE PAR PAGE
------------------------------------------------------*/
-pageSettingsBtn.addEventListener("click", () => {
-    pageSettingsModal.classList.remove("hidden");
-});
 
-closePageSettings.addEventListener("click", () => {
-    pageSettingsModal.classList.add("hidden");
-});
+// ---------------------------------------------------
+// DETECT CURRENT PAGE
+// ---------------------------------------------------
+function getCurrentPage() {
+    const canvases = [...pdfRenderArea.querySelectorAll("canvas")];
 
-// Cliquer en dehors ferme la modale
-pageSettingsModal.addEventListener("click", (e) => {
-    if (e.target === pageSettingsModal) {
-        pageSettingsModal.classList.add("hidden");
+    for (let i = 0; i < canvases.length; i++) {
+        const rect = canvases[i].getBoundingClientRect();
+
+        if (rect.top < window.innerHeight * 0.5 && rect.bottom > 0) {
+            return i + 1;
+        }
     }
-});
+
+    return 1;
+}
+
+
+// ---------------------------------------------------
+// SCROLL ENGINE (WITH PER-PAGE SPEED)
+// ---------------------------------------------------
+function startScroll() {
+    if (!isPlaying) return;
+
+    const currentPage = getCurrentPage();
+    const speed = pageSpeeds[currentPage] ?? scrollSpeed;
+
+    scroller.scrollTop += speed;
+
+    if (scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 10) {
+        togglePlay();
+        return;
+    }
+
+    animationId = requestAnimationFrame(startScroll);
+}
+
+function togglePlay() {
+    isPlaying = !isPlaying;
+
+    if (isPlaying) {
+        btnToggle.innerHTML = '<i data-lucide="pause"></i>';
+        lucide.createIcons();
+        startScroll();
+    } else {
+        btnToggle.innerHTML = '<i data-lucide="play"></i>';
+        lucide.createIcons();
+        cancelAnimationFrame(animationId);
+    }
+}

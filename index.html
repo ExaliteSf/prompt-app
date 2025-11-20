@@ -1,66 +1,84 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Teleprompteur PDF</title>
 
-    <!-- Police SF Pro Display -->
-    <link rel="stylesheet" href="/fonts/sfpro.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio Prompter</title>
 
-    <!-- Styles globaux -->
-    <link rel="stylesheet" href="/src/style.css" />
-  </head>
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-  <body>
-    <!-- CONTAINER PRINCIPAL -->
-    <div id="pdfContainer" class="pdf-container">
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-      <!-- CONTROLES FLOTTANTS -->
-      <div id="floatingControls" class="floating-controls">
+    <!-- CSS -->
+    <link rel="stylesheet" href="src/style.css">
 
-        <button id="startBtn" class="glass-btn">▶ Démarrer</button>
-        <button id="stopBtn" class="glass-btn danger">⏸ Stop</button>
-        <button id="pageSettingsBtn" class="glass-btn">⚙️ Par page</button>
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+            "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    </script>
+</head>
 
-        <div class="speed-wrapper">
-          <input id="speedRange" type="range" min="0" max="10" step="0.5" value="2">
+<body class="app">
+
+    <!-- SCROLL AREA -->
+    <div id="scroller" class="scroll-zone hide-scrollbar">
+
+        <!-- Écran d'accueil -->
+        <div id="empty" class="empty-state">
+            <div class="empty-card">
+                <i data-lucide="monitor-play" class="icon-main"></i>
+                <h1>Studio Prompter</h1>
+                <p class="subtitle">Interface pro pour créateurs</p>
+
+                <label class="upload-btn">
+                    <i data-lucide="upload-cloud" class="mr-2"></i>
+                    Charger un PDF
+                    <input type="file" id="fileInput" accept="application/pdf" multiple hidden>
+                </label>
+            </div>
         </div>
-      </div>
 
-      <!-- ÉCRAN D’ACCUEIL : BOUTON IMPORT SEUL -->
-      <div id="emptyMessage" class="empty-message">
-        <label class="upload-btn">
-          +
-          <input id="fileInput" type="file" accept="application/pdf" multiple hidden>
-        </label>
-      </div>
+        <!-- Zone des PDF -->
+        <div id="pdfArea" class="pdf-area"></div>
+    </div>
 
-      <!-- CONTENU PDF -->
-      <div id="pdfContent" class="pdf-content"></div>
+    <!-- HUD -->
+    <div id="hud" class="hud">
+
+        <!-- Ligne 1 -->
+        <div class="hud-row">
+
+            <button id="toggleBtn" class="play-btn">
+                <i data-lucide="play"></i>
+            </button>
+
+            <div class="slider-box">
+                <i data-lucide="turtle"></i>
+                <input type="range" id="speed" min="0.2" max="5" step="0.1" value="1.5">
+                <i data-lucide="rabbit"></i>
+            </div>
+
+            <button id="settingsBtn" class="hud-btn">
+                <i data-lucide="settings-2"></i>
+            </button>
+        </div>
+
+        <!-- Options avancées (VIDES — rempli via JS) -->
+        <div id="advanced" class="advanced hidden"></div>
 
     </div>
 
+    <div id="tap-zone" class="absolute inset-0 z-30 hidden"></div>
 
+    <script src="src/main.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
 
-    <!-- ⚙️ MODALE : REGLAGE DEFILEMENT PAR PAGE -->
-    <div id="pageSettingsModal" class="page-modal hidden">
-      <div class="page-modal-content">
-
-        <div class="modal-header">
-          <h2>Défilement par page</h2>
-          <button id="closePageSettings" class="close-btn">✖</button>
-        </div>
-
-        <!-- Liste dynamique générée via JS -->
-        <div id="pageSettingsList" class="modal-list"></div>
-
-      </div>
-    </div>
-
-
-
-    <!-- Script principal -->
-    <script type="module" src="/src/main.js"></script>
-  </body>
 </html>

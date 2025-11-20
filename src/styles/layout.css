@@ -1,6 +1,6 @@
 /* ------------------------------
    CONTENEUR PDF — LIQUID GLASS
------------------------------- */
+------------------------------ 
 
 .pdf-container {
   width: 100vw;
@@ -44,7 +44,7 @@
 
 /* ------------------------------
    MESSAGE PAR DÉFAUT
------------------------------- */
+------------------------------ 
 
 .empty-message {
   display: flex;
@@ -54,7 +54,7 @@
   width: 100%;
   height: 100%;
 
-  /* On supprime totalement le style de la card */
+  /* On supprime totalement le style de la card 
   background: none;
   border: none;
   box-shadow: none;
@@ -67,7 +67,7 @@
 
 /* ------------------------------
    BOUTON IMPORT — LIQUID GLASS + ROND + VERT
------------------------------- */
+------------------------------ 
 
 .upload-btn {
   position: relative;
@@ -86,12 +86,12 @@
   font-weight: 600;
   color: #ffffff;
 
-  /* Lisibilité même sur canvas blanc */
+  /* Lisibilité même sur canvas blanc 
   text-shadow:
       0px 2px 4px rgba(0, 0, 0, 0.55),
       0px 0px 6px rgba(0, 0, 0, 0.35);
 
-  /* Gradient Liquid Glass vert */
+  /* Gradient Liquid Glass vert 
   background: linear-gradient(
       145deg,
       rgba(200, 255, 240, 0.55) 0%,
@@ -99,11 +99,11 @@
       rgba(0, 60, 28, 0.38) 100%
   );
 
-  /* Blur et profondeur */
+  /* Blur et profondeur 
   backdrop-filter: blur(18px) saturate(180%);
   -webkit-backdrop-filter: blur(18px) saturate(180%);
 
-  /* Ombres Liquid Glass */
+  /* Ombres Liquid Glass 
   box-shadow:
     0 10px 30px rgba(0, 0, 0, 0.55),
     inset 2px 2px 8px rgba(255, 255, 255, 0.55),
@@ -123,7 +123,7 @@
   transform: scale(0.93);
 }
 
-/* Reflet glossy */
+/* Reflet glossy 
 .upload-btn::before {
   content: "";
   position: absolute;
@@ -141,7 +141,7 @@
 
 /* ------------------------------
    PDF CONTENT
------------------------------- */
+------------------------------ 
 
 .pdf-content {
   width: 100%;
@@ -164,7 +164,7 @@
 
 /* ------------------------------
    RESPONSIVE
------------------------------- */
+------------------------------ 
 
 @media (max-width: 1024px) {
   .empty-message { font-size: 1.3rem; padding: 22px 28px; }
@@ -178,3 +178,4 @@
 @media (max-width: 350px) {
   .empty-message { font-size: 1rem; padding: 15px 15px; }
 }
+*/
