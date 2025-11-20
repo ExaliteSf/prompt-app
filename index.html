@@ -3,17 +3,35 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Studio Prompter</title>
 
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Mobile & PWA -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0F1115">
+
+    <!-- Application -->
+    <title>Studio Prompter</title>
+    <meta name="description" content="Teleprompter professionnel, optimisé pour créateurs.">
+
+    <!-- Web App manifest -->
+    <link rel="manifest" href="/manifest.json">
 
     <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png">
+    <link rel="apple-touch-icon" href="/icons/icon-512.png">
+
+    <!-- Fullscreen Web App sur iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="src/style.css">
+    <!-- App CSS -->
+    <link rel="stylesheet" href="/src/style.css">
 
     <!-- PDF.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -22,6 +40,7 @@
             "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
     </script>
 </head>
+
 
 <body class="app">
 
@@ -68,17 +87,41 @@
             </button>
         </div>
 
-        <!-- Options avancées (VIDES — rempli via JS) -->
-        <div id="advanced" class="advanced hidden"></div>
+        <!-- PANEL PARAMÈTRES -->
+        <div id="advanced" class="advanced hidden">
 
+            <!-- Bouton retour -->
+            <button id="closeSettings" class="settings-close">
+                <i data-lucide="x"></i>
+            </button>
+
+            <!-- Contenu généré automatiquement -->
+            <div id="settingsContent"></div>
+
+        </div>
     </div>
 
+    <!-- Zone invisible utilisée pour interactions tactiles -->
     <div id="tap-zone" class="absolute inset-0 z-30 hidden"></div>
 
-    <script src="src/main.js"></script>
+    <!-- App JS -->
+    <script src="/src/main.js"></script>
+
+    <!-- Lucide init -->
     <script>
         lucide.createIcons();
     </script>
-</body>
 
+        <!-- Enregistrement du Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(() => console.log("Service Worker registered"))
+                    .catch(err => console.error("SW error:", err));
+            });
+        }
+    </script>
+
+</body>
 </html>

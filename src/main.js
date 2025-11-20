@@ -8,7 +8,7 @@ let currentScale = 1.0;
 
 let totalPages = 0;
 
-// ⚠️ vitesses par page
+// vitesses personnalisées par page
 let pageSpeeds = {};
 
 
@@ -17,12 +17,14 @@ const scroller = document.getElementById('scroller');
 const pdfRenderArea = document.getElementById('pdfArea');
 const fileInput = document.getElementById('fileInput');
 const emptyState = document.getElementById('empty');
-const hudControls = document.getElementById('hud');
-const advancedSettings = document.getElementById('advanced');
 
 const btnToggle = document.getElementById('toggleBtn');
 const speedRange = document.getElementById('speed');
 const btnSettings = document.getElementById('settingsBtn');
+
+const settingsPanel = document.getElementById('advanced');
+const settingsContent = document.getElementById('settingsContent');
+const closeSettings = document.getElementById('closeSettings');
 
 
 // ---------------------------------------------------
@@ -36,7 +38,7 @@ fileInput.addEventListener('change', async (e) => {
     emptyState.style.display = 'none';
     pdfRenderArea.innerHTML = "";
     totalPages = 0;
-    pageSpeeds = {}; // reset des vitesses
+    pageSpeeds = {}; // reset vitesses pages
 
     for (const file of files) {
         const url = URL.createObjectURL(file);
@@ -62,10 +64,28 @@ speedRange.addEventListener('input', (e) => {
 
 
 // ---------------------------------------------------
-// SETTINGS PANEL
+// OPEN SETTINGS PANEL
 // ---------------------------------------------------
 btnSettings.addEventListener('click', () => {
-    advancedSettings.classList.toggle('hidden');
+    settingsPanel.classList.toggle('hidden');
+});
+
+
+// ---------------------------------------------------
+// CLOSE SETTINGS PANEL → retour à l'écran d'accueil
+// ---------------------------------------------------
+closeSettings.addEventListener('click', () => {
+
+    // réinitialise l’application (mais laisse les PDF chargés)
+    settingsPanel.classList.add('hidden');
+    emptyState.style.display = 'flex';
+    pdfRenderArea.innerHTML = "";
+    totalPages = 0;
+    pageSpeeds = {};
+    cancelAnimationFrame(animationId);
+
+    btnToggle.innerHTML = '<i data-lucide="play"></i>';
+    lucide.createIcons();
 });
 
 
@@ -117,17 +137,17 @@ async function renderPDF(url) {
 
 
 // ---------------------------------------------------
-// SETTINGS CONTENT (PER-PAGE SPEED CONTROL)
+// SETTINGS CONTENT (per-page speed)
 // ---------------------------------------------------
 function updateSettingsPanel() {
-    advancedSettings.innerHTML = `
+
+    settingsContent.innerHTML = `
         <div class="settings-title">
-            <strong>Nombre total de pages :</strong> ${totalPages}
+            <strong>Total pages :</strong> ${totalPages}
         </div>
 
         <div class="settings-grid">
             ${Array.from({ length: totalPages }, (_, i) => {
-
                 const speedValue = pageSpeeds[i + 1] ?? scrollSpeed;
 
                 return `
@@ -135,10 +155,10 @@ function updateSettingsPanel() {
                         <span>Page ${i + 1}</span>
 
                         <input 
-                            type="range" 
-                            min="0" 
-                            max="10" 
-                            step="0.5" 
+                            type="range"
+                            min="0"
+                            max="10"
+                            step="0.5"
                             value="${speedValue}"
                             data-page="${i + 1}"
                             class="page-speed-slider"
@@ -149,10 +169,12 @@ function updateSettingsPanel() {
         </div>
     `;
 
+    // sliders par page
     document.querySelectorAll(".page-speed-slider").forEach(slider => {
         slider.addEventListener("input", (e) => {
             const page = Number(e.target.dataset.page);
             const value = Number(e.target.value);
+
             pageSpeeds[page] = value;
         });
     });
@@ -178,7 +200,7 @@ function getCurrentPage() {
 
 
 // ---------------------------------------------------
-// SCROLL ENGINE (WITH PER-PAGE SPEED)
+// SCROLL ENGINE
 // ---------------------------------------------------
 function startScroll() {
     if (!isPlaying) return;

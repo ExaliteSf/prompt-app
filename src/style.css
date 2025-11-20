@@ -264,3 +264,21 @@ input[type=range] {
 .settings-page input[type=range] {
     width: 100%;
 }
+
+.settings-close {
+    grid-column: span 4;
+    justify-self: end;
+    padding: 6px;
+    border-radius: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-soft);
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.settings-close:hover {
+    background: #1f2229;
+    color: var(--text);
+}
