@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teleprompteur PDF</title>
+
+    <!-- Police SF Pro Display -->
+    <link rel="stylesheet" href="/fonts/sfpro.css">
+
+    <!-- Styles globaux -->
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+
+  <body>
+    <!-- CONTAINER PRINCIPAL -->
+    <div id="pdfContainer" class="pdf-container">
+
+      <!-- CONTROLES FLOTTANTS -->
+      <div id="floatingControls" class="floating-controls">
+
+        <button id="startBtn" class="glass-btn">▶ Démarrer</button>
+        <button id="stopBtn" class="glass-btn danger">⏸ Stop</button>
+        <button id="pageSettingsBtn" class="glass-btn">⚙️ Par page</button>
+
+        <div class="speed-wrapper">
+          <input id="speedRange" type="range" min="0" max="10" step="0.5" value="2">
+        </div>
+      </div>
+
+      <!-- ÉCRAN D’ACCUEIL : BOUTON IMPORT SEUL -->
+      <div id="emptyMessage" class="empty-message">
+        <label class="upload-btn">
+          +
+          <input id="fileInput" type="file" accept="application/pdf" multiple hidden>
+        </label>
+      </div>
+
+      <!-- CONTENU PDF -->
+      <div id="pdfContent" class="pdf-content"></div>
+
+    </div>
+
+
+
+    <!-- ⚙️ MODALE : REGLAGE DEFILEMENT PAR PAGE -->
+    <div id="pageSettingsModal" class="page-modal hidden">
+      <div class="page-modal-content">
+
+        <div class="modal-header">
+          <h2>Défilement par page</h2>
+          <button id="closePageSettings" class="close-btn">✖</button>
+        </div>
+
+        <!-- Liste dynamique générée via JS -->
+        <div id="pageSettingsList" class="modal-list"></div>
+
+      </div>
+    </div>
+
+
+
+    <!-- Script principal -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
