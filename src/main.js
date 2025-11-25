@@ -6,13 +6,9 @@ lucide.createIcons();
 let isPlaying = false;
 let scrollSpeed = 1.5;
 let animationId = null;
-let currentScale = 1.0;
 
+let documents = []; // <-- liste des PDF + vitesses + index pages
 let totalPages = 0;
-
-// vitesses personnalisées par page
-let pageSpeeds = {};
-
 
 // DOM
 const scroller = document.getElementById('scroller');
@@ -39,12 +35,27 @@ fileInput.addEventListener('change', async (e) => {
 
     emptyState.style.display = 'none';
     pdfRenderArea.innerHTML = "";
+
+    documents = [];
     totalPages = 0;
-    pageSpeeds = {}; // reset vitesses pages
 
     for (const file of files) {
         const url = URL.createObjectURL(file);
-        await renderPDF(url);
+
+        const startIndex = totalPages; 
+
+        const numPages = await renderPDF(url);
+        const endIndex = startIndex + numPages - 1;
+
+        // ajouter document
+        documents.push({
+            name: file.name,
+            speed: scrollSpeed,   // vitesse par défaut
+            startIndex,
+            endIndex
+        });
+
+        totalPages += numPages;
     }
 
     updateSettingsPanel();
@@ -58,10 +69,18 @@ btnToggle.addEventListener('click', togglePlay);
 
 
 // ---------------------------------------------------
-// SPEED CONTROL
+// SPEED CONTROL (HUD SLIDER = PDF COURANT)
 // ---------------------------------------------------
 speedRange.addEventListener('input', (e) => {
-    scrollSpeed = parseFloat(e.target.value);
+    const speed = parseFloat(e.target.value);
+
+    // trouver le PDF actuellement affiché
+    const docIndex = getCurrentDocumentIndex();
+    if (docIndex !== -1) {
+        documents[docIndex].speed = speed;     // update vitesse PDF
+    }
+
+    scrollSpeed = speed; // utilisé si aucun doc détecté (edge case)
 });
 
 
@@ -74,16 +93,14 @@ btnSettings.addEventListener('click', () => {
 
 
 // ---------------------------------------------------
-// CLOSE SETTINGS PANEL → retour à l'écran d'accueil
+// CLOSE SETTINGS PANEL
 // ---------------------------------------------------
 closeSettings.addEventListener('click', () => {
-
-    // réinitialise l’application (mais laisse les PDF chargés)
     settingsPanel.classList.add('hidden');
     emptyState.style.display = 'flex';
     pdfRenderArea.innerHTML = "";
+    documents = [];
     totalPages = 0;
-    pageSpeeds = {};
     cancelAnimationFrame(animationId);
 
     btnToggle.innerHTML = '<i data-lucide="play"></i>';
@@ -103,16 +120,15 @@ document.addEventListener('keydown', (e) => {
 
 
 // ---------------------------------------------------
-// RENDER PDF
+// RENDER PDF  → retourne nombre de pages
 // ---------------------------------------------------
 async function renderPDF(url) {
     try {
         const pdf = await pdfjsLib.getDocument(url).promise;
 
-        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+        let num = pdf.numPages;
 
-            totalPages++;
-
+        for (let pageNum = 1; pageNum <= num; pageNum++) {
             const page = await pdf.getPage(pageNum);
             const viewport = page.getViewport({ scale: 2.0 });
 
@@ -131,73 +147,78 @@ async function renderPDF(url) {
             pdfRenderArea.appendChild(canvas);
         }
 
+        return num;
+
     } catch (err) {
         console.error(err);
         alert("Erreur lors du chargement du PDF : " + err.message);
+        return 0;
     }
 }
 
 
 // ---------------------------------------------------
-// SETTINGS CONTENT (per-page speed)
+// SETTINGS CONTENT (par PDF)
 // ---------------------------------------------------
 function updateSettingsPanel() {
 
     settingsContent.innerHTML = `
         <div class="settings-title">
-            <strong>Total pages :</strong> ${totalPages}
+            <strong>Documents chargés :</strong>
         </div>
 
         <div class="settings-grid">
-            ${Array.from({ length: totalPages }, (_, i) => {
-                const speedValue = pageSpeeds[i + 1] ?? scrollSpeed;
+            ${documents.map((doc, i) => `
+                <div class="settings-page">
+                    <span>${doc.name}</span>
 
-                return `
-                    <div class="settings-page">
-                        <span>Page ${i + 1}</span>
-
-                        <input 
-                            type="range"
-                            min="0"
-                            max="10"
-                            step="0.5"
-                            value="${speedValue}"
-                            data-page="${i + 1}"
-                            class="page-speed-slider"
-                        >
-                    </div>
-                `;
-            }).join("")}
+                    <input 
+                        type="range"
+                        min="0.2"
+                        max="5"
+                        step="0.1"
+                        value="${doc.speed}"
+                        data-doc="${i}"
+                        class="pdf-speed-slider"
+                    >
+                </div>
+            `).join("")}
         </div>
     `;
 
-    // sliders par page
-    document.querySelectorAll(".page-speed-slider").forEach(slider => {
+    document.querySelectorAll(".pdf-speed-slider").forEach(slider => {
         slider.addEventListener("input", (e) => {
-            const page = Number(e.target.dataset.page);
-            const value = Number(e.target.value);
+            const idx = Number(e.target.dataset.doc);
+            documents[idx].speed = Number(e.target.value);
 
-            pageSpeeds[page] = value;
+            // si le doc modifié est affiché → update HUD slider
+            if (idx === getCurrentDocumentIndex()) {
+                speedRange.value = documents[idx].speed;
+            }
         });
     });
 }
 
 
 // ---------------------------------------------------
-// DETECT CURRENT PAGE
+// DETECT CURRENT DOCUMENT
 // ---------------------------------------------------
-function getCurrentPage() {
+function getCurrentDocumentIndex() {
     const canvases = [...pdfRenderArea.querySelectorAll("canvas")];
 
     for (let i = 0; i < canvases.length; i++) {
         const rect = canvases[i].getBoundingClientRect();
 
         if (rect.top < window.innerHeight * 0.5 && rect.bottom > 0) {
-            return i + 1;
+
+            // i = index page → quel doc ?
+            return documents.findIndex(doc =>
+                i >= doc.startIndex && i <= doc.endIndex
+            );
         }
     }
 
-    return 1;
+    return -1;
 }
 
 
@@ -207,8 +228,12 @@ function getCurrentPage() {
 function startScroll() {
     if (!isPlaying) return;
 
-    const currentPage = getCurrentPage();
-    const speed = pageSpeeds[currentPage] ?? scrollSpeed;
+    const docIndex = getCurrentDocumentIndex();
+    let speed = scrollSpeed;
+
+    if (docIndex !== -1) {
+        speed = documents[docIndex].speed;
+    }
 
     scroller.scrollTop += speed;
 
