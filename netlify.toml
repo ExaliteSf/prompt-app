@@ -3,6 +3,26 @@
   publish = "dist"
 
 [[redirects]]
+  from = "/src/*"
+  to = "/src/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/icons/*"
+  to = "/icons/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/manifest.json"
+  to = "/manifest.json"
+  status = 200
+
+[[redirects]]
+  from = "/service-worker.js"
+  to = "/service-worker.js"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

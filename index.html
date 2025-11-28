@@ -3,7 +3,6 @@
 
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0F1115">
 
@@ -26,16 +25,6 @@
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc =
             "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-    </script>
-
-    <!-- Auth check -->
-    <script type="module">
-        import { supabase } from "./src/supabase.js";
-
-        const { data } = await supabase.auth.getSession();
-        if (!data.session) {
-            window.location.href = "/login.html";
-        }
     </script>
 </head>
 
@@ -85,7 +74,7 @@
 
     <div id="tap-zone" class="absolute inset-0 z-30 hidden"></div>
 
-    <!-- Main app logic -->
+    <!-- Charge toute la logique de l'app + AUTH CHECK -->
     <script type="module" src="/src/main.js"></script>
 
     <script>
@@ -93,9 +82,9 @@
     </script>
 
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("/service-worker.js")
                     .then(() => console.log("Service Worker registered"))
                     .catch(err => console.error("SW error:", err));
             });
@@ -103,5 +92,4 @@
     </script>
 
 </body>
-
 </html>
