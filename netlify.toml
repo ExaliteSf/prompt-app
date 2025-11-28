@@ -2,7 +2,7 @@
   command = "npm run build"
   publish = "dist"
 
-# Permet d'accéder directement aux HTML produits par Vite
+# Autoriser login.html comme page indépendante
 [[redirects]]
   from = "/login"
   to = "/login.html"
@@ -13,6 +13,7 @@
   to = "/login.html"
   status = 200
 
+# Autoriser index.html
 [[redirects]]
   from = "/index"
   to = "/index.html"
@@ -23,10 +24,7 @@
   to = "/index.html"
   status = 200
 
-# 🔥 Très IMPORTANT :
-# On inclut le fallback pour *UNIQUEMENT* ce qui n'est pas un fichier existant
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  conditions = { Role = ["!stati]()
