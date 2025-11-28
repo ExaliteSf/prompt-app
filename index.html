@@ -40,6 +40,19 @@
 
 <body class="app">
 
+    <!-- ==========================
+         AUTH PROTECTION
+    =========================== -->
+    <script type="module">
+        import { supabase } from "/src/supabase.js";
+
+        const { data } = await supabase.auth.getSession();
+
+        if (!data.session) {
+            window.location.href = "/login.html";
+        }
+    </script>
+
     <!-- SCROLL AREA -->
     <div id="scroller" class="scroll-zone hide-scrollbar">
 
@@ -91,7 +104,7 @@
                 <i data-lucide="x"></i>
             </button>
 
-            <!-- ⚠️ Cette zone sera remplie AUTOMATIQUEMENT par main.js -->
+            <!-- Zone remplie automatiquement -->
             <div id="settingsContent"></div>
 
         </div>
@@ -99,6 +112,9 @@
 
     <!-- Zone invisible utilisée pour interactions tactiles -->
     <div id="tap-zone" class="absolute inset-0 z-30 hidden"></div>
+
+    <!-- Supabase JS -->
+    <script type="module" src="/src/supabase.js"></script>
 
     <!-- App JS (Vite) -->
     <script type="module" src="/src/main.js"></script>
@@ -120,4 +136,5 @@
     </script>
 
 </body>
+
 </html>
