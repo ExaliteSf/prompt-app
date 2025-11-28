@@ -2,27 +2,31 @@
   command = "npm run build"
   publish = "dist"
 
+# Permet d'accéder directement aux HTML produits par Vite
 [[redirects]]
-  from = "/src/*"
-  to = "/src/:splat"
+  from = "/login"
+  to = "/login.html"
   status = 200
 
 [[redirects]]
-  from = "/icons/*"
-  to = "/icons/:splat"
+  from = "/login.html"
+  to = "/login.html"
   status = 200
 
 [[redirects]]
-  from = "/manifest.json"
-  to = "/manifest.json"
+  from = "/index"
+  to = "/index.html"
   status = 200
 
 [[redirects]]
-  from = "/service-worker.js"
-  to = "/service-worker.js"
+  from = "/index.html"
+  to = "/index.html"
   status = 200
 
+# 🔥 Très IMPORTANT :
+# On inclut le fallback pour *UNIQUEMENT* ce qui n'est pas un fichier existant
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  conditions = { Role = ["!stati]()
