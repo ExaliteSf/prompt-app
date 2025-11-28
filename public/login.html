@@ -22,13 +22,13 @@
     </div>
 
     <script type="module">
-        import { supabase } from "/src/supabase.js";
+        import { supabase } from "/supabase.js";
 
         document.getElementById("loginGoogle").addEventListener("click", async () => {
             await supabase.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: window.location.origin + "/src/pages/login.html" 
+                    redirectTo: window.location.origin + "/login.html" 
                     // on revient ici pour vérifier la session
                 }
             });
@@ -38,7 +38,7 @@
         const { data } = await supabase.auth.getSession();
         if (data.session) {
             // Session déjà active → accès autorisé
-            window.location.href = "/src/pages/index.html";
+            window.location.href = "/index.html";
         }
 
         lucide.createIcons();
