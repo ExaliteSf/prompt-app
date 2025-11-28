@@ -36,7 +36,7 @@
          AUTH PROTECTION
     =========================== -->
     <script type="module">
-        import { supabase } from "/src/supabase.js";
+        import { supabase } from "/public/supabase.js";
 
         const { data } = await supabase.auth.getSession();
 
@@ -96,7 +96,7 @@
     <div id="tap-zone" class="absolute inset-0 z-30 hidden"></div>
 
     <!-- Supabase -->
-    <script type="module" src="/src/supabase.js"></script>
+    <script type="module" src="public/supabase.js"></script>
 
     <!-- App -->
     <script type="module" src="/src/main.js"></script>
