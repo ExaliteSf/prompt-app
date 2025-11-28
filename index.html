@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
 
-    <!-- Mobile & PWA -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0F1115">
 
@@ -28,26 +27,21 @@
         pdfjsLib.GlobalWorkerOptions.workerSrc =
             "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
     </script>
-</head>
 
-<body class="app">
-
-    <!-- ==========================
-         AUTH PROTECTION
-    =========================== -->
+    <!-- Auth check -->
     <script type="module">
-        import { supabase } from "/src/supabase.js";
+        import { supabase } from "./src/supabase.js";
 
         const { data } = await supabase.auth.getSession();
-
         if (!data.session) {
             window.location.href = "/login.html";
         }
     </script>
+</head>
 
-    <!-- SCROLL AREA -->
+<body class="app">
+
     <div id="scroller" class="scroll-zone hide-scrollbar">
-
         <div id="empty" class="empty-state">
             <div class="empty-card">
                 <i data-lucide="monitor-play" class="icon-main"></i>
@@ -66,12 +60,8 @@
     </div>
 
     <div id="hud" class="hud">
-
         <div class="hud-row">
-
-            <button id="toggleBtn" class="play-btn">
-                <i data-lucide="play"></i>
-            </button>
+            <button id="toggleBtn" class="play-btn"><i data-lucide="play"></i></button>
 
             <div class="slider-box">
                 <i data-lucide="turtle"></i>
@@ -95,7 +85,7 @@
 
     <div id="tap-zone" class="absolute inset-0 z-30 hidden"></div>
 
-    <!-- App -->
+    <!-- Main app logic -->
     <script type="module" src="/src/main.js"></script>
 
     <script>
