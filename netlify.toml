@@ -2,28 +2,13 @@
   command = "npm run build"
   publish = "dist"
 
-# Autoriser login.html comme page indépendante
+# Autoriser login.html comme page directe
 [[redirects]]
   from = "/login"
   to = "/login.html"
   status = 200
 
-[[redirects]]
-  from = "/login.html"
-  to = "/login.html"
-  status = 200
-
-# Autoriser index.html
-[[redirects]]
-  from = "/index"
-  to = "/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/index.html"
-  to = "/index.html"
-  status = 200
-
+# SPA fallback — NE PAS supprimer
 [[redirects]]
   from = "/*"
   to = "/index.html"
