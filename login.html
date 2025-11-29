@@ -1,25 +1,43 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Connexion – Studio Prompter</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/src/style.css">
+
+    <!-- Icônes Lucide (comme dans index) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
-<body class="bg-zinc-900 flex items-center justify-center h-screen text-white">
+<body>
 
-    <div class="bg-zinc-800 p-10 rounded-2xl border border-zinc-700 text-center w-80">
-        <i data-lucide="log-in" class="mx-auto mb-4" style="width: 48px; height: 48px;"></i>
-        <h1 class="text-xl font-semibold mb-4">Studio Prompter</h1>
+    <div class="empty-state">
+        <div class="empty-card">
 
-        <button id="loginGoogle"
-            class="w-full py-3 bg-blue-600 hover:bg-blue-500 rounded-lg font-semibold flex items-center justify-center gap-2">
-            Connexion avec Google
-        </button>
+            <i data-lucide="log-in" class="icon-main"></i>
+
+            <h1>Studio Prompter</h1>
+
+            <p class="subtitle"> Connexion requise pour accéder à l’application</p>
+
+            <label id="loginGoogle" class="upload-btn" style="cursor: pointer;">
+                <i data-lucide="chrome" class="mr-2"></i>
+                Connexion avec Google
+            </label>
+
+        </div>
     </div>
 
+    <!-- Script -->
     <script type="module" src="/src/login.js"></script>
+
+    <script>
+        lucide.createIcons();
+    </script>
+
 </body>
+
 </html>

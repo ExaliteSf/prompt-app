@@ -282,3 +282,253 @@ input[type=range] {
     background: #1f2229;
     color: var(--text);
 }
+
+/* ========================================
+   USER BANNER (Top-right logged user)
+======================================== */
+
+.user-banner {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 10px 16px;
+    border-radius: 12px;
+
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(12px);
+
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+
+.user-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    object-fit: cover;
+}
+
+.user-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+
+/* ========================================
+   USER BANNER DROPDOWN
+======================================== */
+
+.user-dropdown {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+    min-width: 160px; /* léger + pour beau rendu */
+
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px;
+
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+    backdrop-filter: blur(10px);
+
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.25s ease;
+}
+
+.user-dropdown.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+}
+
+
+.logout-btn {
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-soft);
+    font-size: 0.9rem;
+    text-align: center;      /* Centrage */
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.logout-btn:hover {
+    background: #1f2229;
+    color: var(--text);
+}
+
+/* ========================================
+   SETTINGS TABS (Bibliothèque / Vitesse PDF)
+======================================== */
+
+.settings-tabs {
+    grid-column: span 4;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.settings-tab {
+    flex: 1;
+    padding: 10px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-soft);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.2s;
+    text-align: center;
+}
+
+.settings-tab:hover {
+    background: #1f2229;
+    color: var(--text);
+}
+
+.settings-tab.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+}
+
+.settingsContent {
+    grid-column: span 4;
+}
+
+/* ========================================
+   SETTINGS — Améliorations Bibliothèque PDF
+======================================== */
+
+/* Centrer le titre */
+.settings-title {
+    text-align: center;
+    width: 100%;
+}
+
+/* Centrer la grille */
+.settings-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;   
+    width: 100%;
+}
+
+/* Bloc PDF (réduit 3/4 + centré) */
+.settings-page {
+    width: 75%;           
+    max-width: 600px;      
+}
+
+/* Centrer bouton Charger */
+.settings-page button.upload-btn {
+    width: 100%;           
+    text-align: center;
+    justify-content: center;
+}
+
+/* Responsive téléphone */
+@media (max-width: 600px) {
+    .settings-page {
+        width: 90%;        
+    }
+}
+/* ========================================
+   SETTINGS — Améliorations Bibliothèque PDF
+======================================== */
+
+/* Centrer le titre */
+.settings-title {
+    text-align: center;
+    width: 100%;
+}
+
+/* Centrer la grille */
+.settings-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;   
+    width: 100%;
+}
+
+/* Bloc PDF (réduit 3/4 + centré) */
+.settings-page {
+    width: 75%;            
+    max-width: 600px;      
+}
+
+/* Centrer bouton Charger */
+.settings-page button.upload-btn {
+    width: 100%;           
+    text-align: center;
+    justify-content: center;
+}
+
+/* Responsive téléphone */
+@media (max-width: 600px) {
+    .settings-page {
+        width: 90%;        
+    }
+}
+
+/* ========================================
+   FIX Panel Settings – Scroll + Always visible Close
+======================================== */
+
+#advanced {
+    max-height: 65vh;           
+    overflow-y: auto;            
+    padding-right: 8px;          
+    position: relative;
+    z-index: 500;                
+}
+
+
+.user-banner {
+    z-index: 300;
+}
+
+
+.settings-close {
+    position: sticky;
+    top: -5px;                   
+    z-index: 600;                
+    background: var(--surface);
+}
+
+.settings-reorder {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.settings-reorder button {
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-soft);
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: 0.2s;
+}
+
+.settings-reorder button:hover {
+    background: #1f2229;
+    color: white;
+}

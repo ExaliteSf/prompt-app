@@ -10,7 +10,6 @@
     <meta name="description" content="Teleprompter professionnel, optimisé pour créateurs.">
 
     <link rel="manifest" href="/manifest.json">
-
     <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png">
     <link rel="apple-touch-icon" href="/icons/icon-512.png">
@@ -63,32 +62,39 @@
             </button>
         </div>
 
+        <!--panneau paramètres avec onglets -->
         <div id="advanced" class="advanced hidden">
             <button id="closeSettings" class="settings-close">
                 <i data-lucide="x"></i>
             </button>
 
-            <div id="settingsContent"></div>
+            <div class="settings-tabs">
+                <button id="tabLibrary" class="settings-tab active">Bibliothèque PDF</button>
+                <button id="tabSpeeds" class="settings-tab">Vitesses PDF</button>
+            </div>
+
+            <div id="settingsContent" class="settingsContent"></div>
         </div>
     </div>
 
     <div id="tap-zone" class="absolute inset-0 z-30 hidden"></div>
 
-    <!-- Charge toute la logique de l'app + AUTH CHECK -->
+    <!-- Bandeau utilisateur -->
+    <div id="userBanner" class="user-banner">
+        <img id="userAvatar" class="user-avatar" />
+        <span id="userName" class="user-name"></span>
+
+        <!-- Menu déroulant -->
+        <div id="userDropdown" class="user-dropdown">
+            <button id="logoutBtn" class="logout-btn">Déconnexion</button>
+        </div>
+    </div>
+
+
     <script type="module" src="/src/main.js"></script>
 
     <script>
         lucide.createIcons();
-    </script>
-
-    <script>
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", () => {
-                navigator.serviceWorker.register("/service-worker.js")
-                    .then(() => console.log("Service Worker registered"))
-                    .catch(err => console.error("SW error:", err));
-            });
-        }
     </script>
 
 </body>
